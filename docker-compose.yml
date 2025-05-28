@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   db:
     image: postgres:15
@@ -24,6 +22,8 @@ services:
       DB_NAME: mydb
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     command: ["./main"]
 
 volumes:
