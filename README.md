@@ -40,6 +40,7 @@ docker compose up --build
 
 ## 📁 Estrutura do Projeto
 
+```
 .
 ├── cmd/app/ # main.go - ponto de entrada
 ├── internal/db/ # conexão com o banco de dados
@@ -49,6 +50,7 @@ docker compose up --build
 ├── .env # variáveis de ambiente
 ├── go.mod / go.sum # dependências do projeto
 ├── README.md # instruções e documentação
+```
 
 ### Documentações e guias usados:
 
