@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/Pdhenrique/GoNeoway/internal/db"
+	"github.com/Pdhenrique/GoNeoway/pkg/parser"
 )
 
 func main() {
