@@ -15,7 +15,12 @@ func main() {
 		log.Fatal("ERROR connecting to the db", err)
 	}
 	defer conn.Close()
-
 	fmt.Println("API running and successfuly connected!")
 
+	clients, err := parser.Parse()
+	if err != nil {
+		log.Fatal("erro ao realizar parse do arquivo", err)
+	}
+
+	fmt.Println("Total de arquivos lidos", len(clients))
 }
