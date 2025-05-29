@@ -40,28 +40,33 @@ func Parse() ([]Client, error) {
 
 	for scanner.Scan() {
 		linha := scanner.Text()
-		fmt.Println(len(linha))
 
-		cpf := strings.TrimSpace(linha[0:18])
-		privateStr := strings.TrimSpace(linha[18:30])
-		incompletoStr := strings.TrimSpace(linha[30:43])
-		dataCompraStr := strings.TrimSpace(linha[43:65])
-		ticketMedioStr := strings.TrimSpace(linha[65:87])
-		ticketUltimaStr := strings.TrimSpace(linha[87:111])
-		lojaMaisFreq := strings.TrimSpace(linha[111:131])
-		lojaUltima := strings.TrimSpace(linha[131:150])
+		// Define tamanho do campo em colunas.
+		cpf := strings.TrimSpace(safeSlice(linha, 0, 18))
+		privateStr := strings.TrimSpace(safeSlice(linha, 18, 30))
+		incompletoStr := strings.TrimSpace(safeSlice(linha, 30, 43))
+		dataCompraStr := strings.TrimSpace(safeSlice(linha, 43, 65))
+		ticketMedioStr := strings.TrimSpace(safeSlice(linha, 65, 87))
+		ticketUltimaStr := strings.TrimSpace(safeSlice(linha, 87, 111))
+		lojaMaisFreq := strings.TrimSpace(safeSlice(linha, 111, 131))
+		lojaUltima := strings.TrimSpace(safeSlice(linha, 131, 150))
 
+		// Transformar String em Int
 		private, err := strconv.Atoi(privateStr)
 		if err != nil {
 			private = 0
 		}
 
+		// Transformar String em Int
 		incompleto, err := strconv.Atoi(incompletoStr)
 		if err != nil {
 			incompleto = 0
 		}
 
+		// Transforma String em data e valida caso seja null
 		dataCompra := parseNullableDate(dataCompraStr)
+
+		// Transforma String em Float e valida caso seja null
 		ticketMedio := parseNullableFloat(ticketMedioStr)
 		ticketUltima := parseNullableFloat(ticketUltimaStr)
 
@@ -75,8 +80,7 @@ func Parse() ([]Client, error) {
 			LOJA_MAIS_FREQUENTADA: lojaMaisFreq,
 			LOJA_ULTIMA_COMPRA:    lojaUltima})
 
-		fmt.Printf("CPF: %s | PRIVATE: %s | INCOMPLETO: %s | MAISFREQ: %s | ULTIMA: %s\n", cpf, privateStr, incompletoStr, lojaMaisFreq, lojaUltima)
-
+		fmt.Printf("%+v\n", clients[len(clients)-1])
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -86,25 +90,40 @@ func Parse() ([]Client, error) {
 	return clients, nil
 }
 
-func parseNullableFloat(s string) *float64 {
-	if s == "" || strings.ToUpper(s) == "NULL" {
+// Transforma String em Float e valida caso seja null
+func parseNullableFloat(arg string) *float64 {
+	if arg == "" || strings.ToUpper(arg) == "NULL" {
 		return nil
 	}
-	f, err := strconv.ParseFloat(s, 64)
+	f, err := strconv.ParseFloat(arg, 64)
 	if err != nil {
 		return nil
 	}
 	return &f
 }
 
-func parseNullableDate(s string) *time.Time {
-	if s == "" || strings.ToUpper(s) == "NULL" {
+// Transforma String em data e valida caso seja null
+func parseNullableDate(arg string) *time.Time {
+	if arg == "" || strings.ToUpper(arg) == "NULL" {
 		return nil
 	}
-	layout := "2006-01-02" // ajuste se necessário
-	t, err := time.Parse(layout, s)
+	layout := "2006-01-02"
+	t, err := time.Parse(layout, arg)
 	if err != nil {
 		return nil
 	}
 	return &t
+}
+
+// Verifica tamanho da
+func safeSlice(arg string, start int, end int) string {
+	if len(arg) < start {
+		return ""
+	}
+
+	if len(arg) < end {
+		end = len(arg)
+	}
+
+	return arg[start:end]
 }

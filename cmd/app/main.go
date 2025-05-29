@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/Pdhenrique/GoNeoway/internal/db"
-	"github.com/Pdhenrique/GoNeoway/pkg/parser"
 )
 
 func main() {
@@ -17,10 +17,11 @@ func main() {
 	defer conn.Close()
 	fmt.Println("API running and successfuly connected!")
 
-	clients, err := parser.Parse()
-	if err != nil {
-		log.Fatal("erro ao realizar parse do arquivo", err)
-	}
+	// clients, err := parser.Parse()
+	// if err != nil {
+	// 	log.Fatal("erro ao realizar parse do arquivo", err)
+	// }
 
-	fmt.Println("Total de arquivos lidos", len(clients))
+	http.ListenAndServe(":8080", nil)
+
 }
