@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/Pdhenrique/GoNeoway/internal/db"
 	"github.com/Pdhenrique/GoNeoway/pkg/parser"
 	"github.com/Pdhenrique/GoNeoway/pkg/sanitizer"
+	"github.com/Pdhenrique/GoNeoway/pkg/repository"
 )
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 	defer conn.Close()
 	fmt.Println("API running and successfuly connected!")
 
-	file, _ := os.Open("base_teste_2.txt")
+	file, _ := os.Open("base_teste.txt")
 
 	clients, err := parser.Parse(file)
 	if err != nil {
@@ -32,8 +32,13 @@ func main() {
 		log.Fatal("erro ao realizar limpeza dos valores", err)
 	}
 
-	fmt.Println("sanitized", sanitized)
+	err = repository.SaveClients(conn, sanitized)
+	if err != nil {
+		log.Fatal("Erro ao persistir no banco", err)
+	}
 
-	http.ListenAndServe(":8080", nil)
+	fmt.Println("Importação finalizada!")
+
+	fmt.Printf("Clientes validos após sanitização: %d\n", len(sanitized))
 
 }
