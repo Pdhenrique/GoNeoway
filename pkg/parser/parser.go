@@ -65,7 +65,7 @@ func Parse(reader io.Reader) ([]model.Client, error) {
 			LOJA_MAIS_FREQUENTADA: lojaMaisFreq,
 			LOJA_ULTIMA_COMPRA:    lojaUltima})
 
-		fmt.Printf("%+v\n", clients[len(clients)-1])
+		// fmt.Printf("%+v\n", clients[len(clients)-1])
 	}
 
 	if err := scanner.Err(); err != nil {
