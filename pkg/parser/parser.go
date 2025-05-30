@@ -3,8 +3,8 @@ package parser
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"log"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -12,16 +12,10 @@ import (
 	"github.com/Pdhenrique/GoNeoway/pkg/model"
 )
 
-func Parse(client string) ([]model.Client, error) {
+func Parse(reader io.Reader) ([]model.Client, error) {
 	var clients []model.Client
 
-	file, err := os.Open("base_teste.txt")
-	if err != nil {
-		log.Fatalf("Erro ao abrir txt", err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(reader)
 
 	if scanner.Scan() {
 		fmt.Println("Pulando cabeçalho:", scanner.Text())
