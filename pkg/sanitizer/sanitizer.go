@@ -9,10 +9,10 @@ import (
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
 
-	"github.com/Pdhenrique/GoNeoway/pkg/model"
+	"github.com/Pdhenrique/GoNeoway/domain"
 )
 
-func Sanitize(client []model.Client) ([]model.Client, error) {
+func Sanitize(client []domain.Client) ([]domain.Client, error) {
 
 	for i := range client {
 		client[i].LOJA_MAIS_FREQUENTADA = sanitizeText(client[i].LOJA_MAIS_FREQUENTADA)

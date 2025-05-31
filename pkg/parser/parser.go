@@ -9,11 +9,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Pdhenrique/GoNeoway/pkg/model"
+	"github.com/Pdhenrique/GoNeoway/domain"
 )
 
-func Parse(reader io.Reader) ([]model.Client, error) {
-	var clients []model.Client
+func Parse(reader io.Reader) ([]domain.Client, error) {
+	var clients []domain.Client
 
 	scanner := bufio.NewScanner(reader)
 
@@ -55,7 +55,7 @@ func Parse(reader io.Reader) ([]model.Client, error) {
 		ticketMedio := parseNullableFloat(ticketMedioStr)
 		ticketUltima := parseNullableFloat(ticketUltimaStr)
 
-		clients = append(clients, model.Client{
+		clients = append(clients, domain.Client{
 			CPF:                   cpf,
 			PRIVATE:               private,
 			INCOMPLETO:            incompleto,

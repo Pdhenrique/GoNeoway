@@ -1,30 +1,37 @@
+networks:
+  clients-network:
+    name: "clients-network"
 services:
   db:
     image: postgres:15
+    container_name: db_clients
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: mydb
     ports:
-      - "5432:5432"
+      - "5555:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    networks:
+      - clients-network
 
   app:
-    build: .
-    depends_on:
-      - db
+    container_name: api_clients
+    build:
+      dockerfile: Dockerfile
+      context: .
     environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: user
-      DB_PASSWORD: password
-      DB_NAME: mydb
+      DATABASE_URL: "postgres://user:password@db:5432/mydb?sslmode=disable"
     ports:
       - "8080:8080"
+    links:
+      - db
+    networks:
+      - clients-network
     env_file:
       - .env
-    command: ["./main"]
 
 volumes:
   pgdata:
