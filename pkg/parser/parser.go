@@ -3,25 +3,19 @@ package parser
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"log"
-	"os"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/Pdhenrique/GoNeoway/pkg/model"
+	"github.com/Pdhenrique/GoNeoway/domain"
 )
 
-func Parse(client string) ([]model.Client, error) {
-	var clients []model.Client
+func Parse(reader io.Reader) ([]domain.Client, error) {
+	var clients []domain.Client
 
-	file, err := os.Open("base_teste.txt")
-	if err != nil {
-		log.Fatalf("Erro ao abrir txt", err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(reader)
 
 	if scanner.Scan() {
 		fmt.Println("Pulando cabeçalho:", scanner.Text())
@@ -61,7 +55,7 @@ func Parse(client string) ([]model.Client, error) {
 		ticketMedio := parseNullableFloat(ticketMedioStr)
 		ticketUltima := parseNullableFloat(ticketUltimaStr)
 
-		clients = append(clients, model.Client{
+		clients = append(clients, domain.Client{
 			CPF:                   cpf,
 			PRIVATE:               private,
 			INCOMPLETO:            incompleto,
@@ -71,7 +65,7 @@ func Parse(client string) ([]model.Client, error) {
 			LOJA_MAIS_FREQUENTADA: lojaMaisFreq,
 			LOJA_ULTIMA_COMPRA:    lojaUltima})
 
-		fmt.Printf("%+v\n", clients[len(clients)-1])
+		// fmt.Printf("%+v\n", clients[len(clients)-1])
 	}
 
 	if err := scanner.Err(); err != nil {
