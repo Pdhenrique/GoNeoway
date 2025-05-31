@@ -108,14 +108,32 @@ func (c *clientStorage) Update(client *domain.Client) error {
 	return err
 }
 
-func SaveClients(db *sql.DB, clients []domain.Client) error {
+func (c *clientStorage) ImportClients(clients []*domain.Client) error {
+	if len(clients) == 0 {
+		return nil // No clients to import
+	}
+
 	query := `INSERT INTO clients (
 		cpf, private, incompleto, data_ultima_compra, 
 		ticket_medio, ticket_ultima_compra, loja_mais_frequentada, loja_ultima_compra
 		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
 
+	tx, err := c.DB.Begin()
+	if err != nil {
+		log.Printf("error starting transaction: %v", err)
+		return err
+	}
+
+	stmt, err := tx.Prepare(query)
+	if err != nil {
+		log.Printf("error preparing statement: %v", err)
+		tx.Rollback()
+		return err
+	}
+	defer stmt.Close()
+
 	for _, client := range clients {
-		_, err := db.Exec(query,
+		_, err := stmt.Exec(
 			client.CPF,
 			client.PRIVATE,
 			client.INCOMPLETO,
@@ -125,10 +143,36 @@ func SaveClients(db *sql.DB, clients []domain.Client) error {
 			client.LOJA_MAIS_FREQUENTADA,
 			client.LOJA_ULTIMA_COMPRA)
 		if err != nil {
+			log.Printf("error inserting client with CPF %s: %v", client.CPF, err)
+			tx.Rollback()
 			return err
 		}
 	}
 
-	return nil
-
+	return tx.Commit()
 }
+
+// func SaveClients(db *sql.DB, clients []domain.Client) error {
+// 	query := `INSERT INTO clients (
+// 		cpf, private, incompleto, data_ultima_compra,
+// 		ticket_medio, ticket_ultima_compra, loja_mais_frequentada, loja_ultima_compra
+// 		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
+
+// 	for _, client := range clients {
+// 		_, err := db.Exec(query,
+// 			client.CPF,
+// 			client.PRIVATE,
+// 			client.INCOMPLETO,
+// 			client.DATA_ULTIMA_COMPRA,
+// 			client.TICKET_MEDIO,
+// 			client.TICKET_ULTIMA_COMPRA,
+// 			client.LOJA_MAIS_FREQUENTADA,
+// 			client.LOJA_ULTIMA_COMPRA)
+// 		if err != nil {
+// 			return err
+// 		}
+// 	}
+
+// 	return nil
+
+// }

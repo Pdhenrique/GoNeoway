@@ -64,8 +64,6 @@ func Parse(reader io.Reader) ([]domain.Client, error) {
 			TICKET_ULTIMA_COMPRA:  ticketUltima,
 			LOJA_MAIS_FREQUENTADA: lojaMaisFreq,
 			LOJA_ULTIMA_COMPRA:    lojaUltima})
-
-		// fmt.Printf("%+v\n", clients[len(clients)-1])
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -76,7 +74,8 @@ func Parse(reader io.Reader) ([]domain.Client, error) {
 }
 
 // Transforma String em Float e valida caso seja null
-func parseNullableFloat(arg string) *float64 {
+func parseNullableFloat(arg string) *domain.FixedFloat {
+	arg = strings.ReplaceAll(arg, ",", ".")
 	if arg == "" || strings.ToUpper(arg) == "NULL" {
 		return nil
 	}
@@ -84,7 +83,10 @@ func parseNullableFloat(arg string) *float64 {
 	if err != nil {
 		return nil
 	}
-	return &float
+
+	fixed := domain.FixedFloat(float)
+
+	return &fixed
 }
 
 // Transforma String em data e valida caso seja null

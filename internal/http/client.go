@@ -60,3 +60,19 @@ func (handler *handler) deleteClient(context *gin.Context) {
 
 	context.AbortWithStatus(http.StatusNoContent)
 }
+
+// func (handler *handler) importClients(context *gin.Context) {
+// 	var clients []*domain.Client
+// 	if err := context.BindJSON(&clients); err != nil {
+// 		context.AbortWithStatus(http.StatusBadRequest)
+// 		return
+// 	}
+
+// 	err := handler.clientService.ImportClients(clients)
+// 	if err != nil {
+// 		context.AbortWithStatus(http.StatusInternalServerError)
+// 		return
+// 	}
+
+// 	context.JSON(http.StatusCreated, clients)
+// }

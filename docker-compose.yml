@@ -16,6 +16,11 @@ services:
       - ./db/init:/docker-entrypoint-initdb.d
     networks:
       - clients-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d mydb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   app:
     container_name: api_clients

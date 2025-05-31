@@ -31,3 +31,7 @@ func (s *service) Get(cpf string) (*domain.Client, error) {
 func (s *service) Update(client *domain.Client) error {
 	return s.clientStorage.Update(client)
 }
+
+// func (s *service) ImportClients(clients []*domain.Client) error {
+// 	return s.clientStorage.ImportClients(clients)
+// }
