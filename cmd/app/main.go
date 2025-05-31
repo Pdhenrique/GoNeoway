@@ -7,6 +7,7 @@ import (
 	"github.com/Pdhenrique/GoNeoway/internal/db"
 	"github.com/Pdhenrique/GoNeoway/internal/http"
 	"github.com/Pdhenrique/GoNeoway/pkg/client"
+	"github.com/Pdhenrique/GoNeoway/pkg/importer"
 )
 
 func main() {
@@ -25,25 +26,14 @@ func main() {
 	clientService := client.NewService(clientStorage)
 	handler := http.NewHandler(clientService)
 
+	importer := importer.New(clientStorage)
+	if err := importer.ImportFromFile("base_teste.txt"); err != nil {
+		log.Fatal("Erro ao importar dados:", err)
+	}
+
 	server := http.NewServer(handler, "8080")
 	server.Start()
 	defer server.Stop()
 
+	select {}
 }
-
-// file, _ := os.Open("base_teste.txt")
-
-// clients, err := parser.Parse(file)
-// if err != nil {
-// 	log.Fatal("erro ao realizar parse do arquivo", err)
-// }
-
-// sanitized, err := sanitizer.Sanitize(clients)
-// if err != nil {
-// 	log.Fatal("erro ao realizar limpeza dos valores", err)
-// }
-
-// err = db.SaveClients(conn, sanitized)
-// if err != nil {
-// 	log.Fatal("Erro ao persistir no banco", err)
-// }
