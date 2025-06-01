@@ -2,9 +2,7 @@
 
 # GoNeoway
 
-Serviço em Go para importação, higienização e persistência de dados em PostgreSQL via Docker.
-
----
+## Serviço em Go para importação, higienização e persistência de dados em PostgreSQL via Docker.
 
 ## 🐳 Executando com Docker Compose
 
@@ -33,6 +31,8 @@ DB_NAME=mydb
 ```
 
 3. Suba a aplicação com Docker Compose:
+
+Arquivo txt é importado automaticamente ao inicializar a aplicação, com o banco rodando.
 
 ```bash
 docker compose up --build
