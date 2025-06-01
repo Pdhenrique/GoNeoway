@@ -35,10 +35,15 @@ func (handler *handler) postClient(context *gin.Context) {
 }
 
 func (handler *handler) putClient(context *gin.Context) {
+	cpf := context.Param("cpf")
 	client := &domain.Client{}
-	if err := context.BindJSON(&client); err != nil {
+
+	if err := context.ShouldBindJSON(&client); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "JSON inválido"})
 		return
 	}
+
+	client.CPF = cpf
 
 	err := handler.clientService.Update(client)
 	if err != nil {
@@ -46,7 +51,7 @@ func (handler *handler) putClient(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusNoContent, client)
+	context.JSON(http.StatusOK, client)
 }
 
 func (handler *handler) deleteClient(context *gin.Context) {

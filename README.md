@@ -38,18 +38,63 @@ DB_NAME=mydb
 docker compose up --build
 ```
 
+4. Importe o arquivo `goneoway.postman_collection.json` no postman
+   Ou utilize estes curls
+
+```bash
+GET: curl --location 'http://localhost:8080/v1/clients/12345678900'
+
+DELETE: curl --location --request DELETE 'http://localhost:8080/v1/clients/12345678900'
+
+POST: curl --location 'http://localhost:8080/v1/clients' \
+--header 'Content-Type: application/json' \
+--data '{
+  "cpf": "12345678900",
+  "private": 1,
+  "incompleto": 0,
+  "data_ultima_compra": "2024-06-01T00:00:00Z",
+  "ticket_medio": 341.45,
+  "ticket_ultima_compra": 399.00,
+  "loja_mais_frequente": "79379491000850",
+  "loja_ultima_compra": "79379491000850"
+}'
+
+PUT: curl --location 'http://localhost:8080/v1/clients' \
+--header 'Content-Type: application/json' \
+--data '{
+  "cpf": "12345678900",
+  "private": 1,
+  "incompleto": 0,
+  "data_ultima_compra": "2024-06-01T00:00:00Z",
+  "ticket_medio": 341.45,
+  "ticket_ultima_compra": 399.00,
+  "loja_mais_frequente": "79379491000850",
+  "loja_ultima_compra": "79379491000850"
+}'
+```
+
 ## 📁 Estrutura do Projeto
 
 ```
-.
-├── cmd/app/ # main.go - ponto de entrada
-├── internal/db/ # conexão com o banco de dados
-├── pkg/ # módulos reutilizáveis (parser, validações, etc.)
-├── docker-compose.yml # define os serviços (app e banco)
-├── Dockerfile # build da aplicação Go
-├── .env # variáveis de ambiente
-├── go.mod / go.sum # dependências do projeto
-├── README.md # instruções e documentação
+.gitignore
+base_teste_2.txt
+base_teste.txt
+cmd/app/main.go
+db/init/create_clients_table.sql
+docker-compose.yml
+Dockerfile
+domain/client.go
+go.mod
+internal/db/clientRepository.go
+internal/db/connect.go
+internal/http/client.go
+internal/http/handler.go
+internal/http/server.go
+pkg/client/client.go
+pkg/importer/service.go
+pkg/parser/parser.go
+pkg/sanitizer/sanitizer.go
+README.md
 ```
 
 ### Documentações e guias usados:

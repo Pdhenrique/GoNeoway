@@ -23,7 +23,7 @@ func NewHandler(clientService domain.ClientService) http.Handler {
 
 	v1.GET("/clients/:cpf", h.getClient)
 	v1.POST("/clients", h.postClient)
-	v1.PUT("/clients", h.putClient)
+	v1.PUT("/clients/:cpf", h.putClient)
 	v1.DELETE("/clients/:cpf", h.deleteClient)
 
 	return router
