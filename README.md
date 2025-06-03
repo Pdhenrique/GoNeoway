@@ -102,3 +102,10 @@ README.md
 https://www.calhoun.io/connecting-to-a-postgresql-database-with-gos-database-sql-package/
 https://github.com/jhonyzam/curso_golang
 https://github.com/golang-standards/project-layout
+
+## TODO
+### Melhorias para refinamento futuro.
+
+- Ajuste pipeline Ci/CD github workflows
+- Melhorar validação de CPF/CNPJ, parcialmente funcional.
+
